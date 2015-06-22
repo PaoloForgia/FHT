@@ -8,6 +8,6 @@ public class TestCore {
 
     @Test
     public void testReadFileAndFolder() throws Exception {
-	new FHTHierarchy(new FHTLoaderConfFS("/Users/paoloforgia/")).print();
+	new FHTHierarchy(new FHTLoaderConfFS("/Users/paoloforgia/Documents/Developer/Server/jboss-eap-6.3/")).print();
     }
 }

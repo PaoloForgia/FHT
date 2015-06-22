@@ -13,7 +13,7 @@ public class FHTLoaderConfFS
     private final File file;
 
     public FHTLoaderConfFS(String path) {
-	this.file = new File(path);
+	this.file = new File(path.endsWith("/") ? path : path + "/");
     }
 
     @Override

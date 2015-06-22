@@ -11,7 +11,7 @@ public final class FHTLoaderFS
 
     @Override
     public FHTNodeInfo getRootInfo() throws Exception {
-	if (infoRoot != null)
+	if (infoRoot == null)
 	    infoRoot = load();
 	return infoRoot;
     }

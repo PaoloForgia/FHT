@@ -21,19 +21,19 @@ public final class FHTNodeInfo {
 	this(name, path, size, isDirectory ? FHTType.folder : FHTType.file);
     }
 
-    protected String getName() {
+    protected synchronized String getName() {
 	return name;
     }
 
-    protected String getPath() {
+    protected synchronized String getPath() {
 	return path;
     }
 
-    protected long getSize() {
+    protected synchronized long getSize() {
 	return size;
     }
 
-    protected FHTType getType() {
+    protected synchronized FHTType getType() {
 	return type;
     }
 
