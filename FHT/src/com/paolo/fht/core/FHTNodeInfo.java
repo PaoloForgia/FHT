@@ -17,6 +17,10 @@ public final class FHTNodeInfo {
 	this.type = type;
     }
 
+    public FHTNodeInfo(String name, String path, long size, boolean isDirectory) {
+	this(name, path, size, isDirectory ? FHTType.folder : FHTType.file);
+    }
+
     protected String getName() {
 	return name;
     }
