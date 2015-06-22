@@ -9,6 +9,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+import com.paolo.fht.tools.FHTConfig;
 import com.paolo.fht.tools.FHTLoaderConf;
 import com.paolo.fht.tools.FHTType;
 import com.paolo.fht.tools.Tools;
@@ -18,6 +19,7 @@ public final class FHTHierarchy
 
     private final FHTLoader loader;
     private final String rootPath;
+    private final FHTConfig config;
 
     public FHTHierarchy(FHTLoaderConf conf) throws Exception {
 	this(conf.getLoader());
@@ -27,20 +29,27 @@ public final class FHTHierarchy
 	super(loader.getRootInfo());
 	this.loader = loader;
 	this.rootPath = loader.getLoaderConf().getAbsolutePath();
+	config = new FHTConfig();
+    }
+
+    public void load() throws Exception {
+	config.load();
 	loadRootChildren();
     }
 
     private void loadRootChildren() throws Exception {
 	loader.load();
-	ExecutorService executor = Executors.newFixedThreadPool(8);
+	ExecutorService executor = Executors.newCachedThreadPool();
 	List<Future<Void>> futureList = new ArrayList<Future<Void>>();
-	for (final File childFile : new File(getAbsoluteRootPath()).listFiles()) {
+	childListing: for (final File childFile : new File(getAbsoluteRootPath()).listFiles()) {
+	    if (config.toIgnore(childFile))
+		continue childListing;
 	    boolean isDirectory = childFile.isDirectory();
 	    final FHTNode childNode = new FHTNodeImpl(new FHTNodeInfo(childFile.getName(), Tools.relativePath(rootPath, childFile.getAbsolutePath()),
 		    childFile.length(), isDirectory), this);
 	    addChild(childNode);
 	    if (isDirectory) {
-		Callable<Void> task = new FHTExecutor() {
+		Callable<Void> task = new Callable<Void>() {
 
 		    @Override
 		    public Void call() throws Exception {
@@ -84,8 +93,11 @@ public final class FHTHierarchy
 
     /**
      * <b>Test: </b> Print herarchy
+     * 
+     * @throws Exception
      */
-    public void print() {
+    public void print() throws Exception {
+	load();
 	printHierarchy(this, 0);
     }
 
