@@ -1,15 +1,15 @@
 package com.paolo.fht.core;
 
-import com.paolo.fht.tools.FHTType;
+import com.paolo.fht.tools.FHTFileType;
 
 public final class FHTNodeInfo {
 
     private final String name;
     private final String path;
     private final long size;
-    private final FHTType type;
+    private final FHTFileType type;
 
-    public FHTNodeInfo(String name, String path, long size, FHTType type) {
+    public FHTNodeInfo(String name, String path, long size, FHTFileType type) {
 	super();
 	this.name = name;
 	this.path = path;
@@ -18,7 +18,7 @@ public final class FHTNodeInfo {
     }
 
     public FHTNodeInfo(String name, String path, long size, boolean isDirectory) {
-	this(name, path, size, isDirectory ? FHTType.folder : FHTType.file);
+	this(name, path, size, isDirectory ? FHTFileType.folder : FHTFileType.file);
     }
 
     protected synchronized String getName() {
@@ -33,7 +33,7 @@ public final class FHTNodeInfo {
 	return size;
     }
 
-    protected synchronized FHTType getType() {
+    protected synchronized FHTFileType getType() {
 	return type;
     }
 

@@ -10,8 +10,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import com.paolo.fht.tools.FHTConfig;
+import com.paolo.fht.tools.FHTFileType;
 import com.paolo.fht.tools.FHTLoaderConf;
-import com.paolo.fht.tools.FHTType;
 import com.paolo.fht.tools.Tools;
 
 public final class FHTHierarchy
@@ -20,6 +20,7 @@ public final class FHTHierarchy
     private final FHTLoader loader;
     private final String rootPath;
     private final FHTConfig config;
+    private final String name;
 
     public FHTHierarchy(FHTLoaderConf conf) throws Exception {
 	this(conf.getLoader());
@@ -30,6 +31,7 @@ public final class FHTHierarchy
 	this.loader = loader;
 	this.rootPath = loader.getLoaderConf().getAbsolutePath();
 	config = new FHTConfig();
+	this.name = getName();
     }
 
     public void load() throws Exception {
@@ -74,7 +76,9 @@ public final class FHTHierarchy
 
     private void loadChildren(File file, FHTNode node) {
 	try {
-	    for (File childFile : file.listFiles()) {
+	    childListing: for (File childFile : file.listFiles()) {
+		if (config.toIgnore(childFile))
+		    continue childListing;
 		boolean isDirectory = childFile.isDirectory();
 		FHTNode childNode = new FHTNodeImpl(new FHTNodeInfo(childFile.getName(), Tools.relativePath(rootPath, file.getAbsolutePath()), childFile.length(),
 			isDirectory), node);
@@ -96,8 +100,12 @@ public final class FHTHierarchy
      * 
      * @throws Exception
      */
-    public void print() throws Exception {
+    public void loadAndPrint() throws Exception {
 	load();
+	print();
+    }
+
+    public void print() {
 	printHierarchy(this, 0);
     }
 
@@ -106,12 +114,37 @@ public final class FHTHierarchy
 	for (int i = 0; i < level; i++) {
 	    tab += "|--";
 	}
-	System.out.println(tab + node.getName());
+	System.out.println(tab + node.getName() + (node.getDifferenceType() != null ? "[" + node.getDifferenceType() + "]" : ""));
 	for (FHTNode child : node.getChildren()) {
-	    if (child.getType() == FHTType.folder)
+	    if (child.getFileType() == FHTFileType.folder)
 		printHierarchy(child, level + 1);
 	    else
-		System.out.println(tab + "|--" + child.getName());
+		System.out.println(tab + "|--" + child.getName() + (node.getDifferenceType() != null ? "[" + node.getDifferenceType() + "]" : ""));
 	}
+    }
+
+    @Override
+    public int hashCode() {
+	final int prime = 31;
+	int result = super.hashCode();
+	result = prime * result + ((name == null) ? 0 : name.hashCode());
+	return result;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+	if (this == obj)
+	    return true;
+	if (!super.equals(obj))
+	    return false;
+	if (getClass() != obj.getClass())
+	    return false;
+	FHTHierarchy other = (FHTHierarchy) obj;
+	if (name == null) {
+	    if (other.name != null)
+		return false;
+	} else if (!name.equals(other.name))
+	    return false;
+	return true;
     }
 }

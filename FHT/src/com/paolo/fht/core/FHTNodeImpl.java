@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import com.paolo.fht.tools.FHTType;
+import com.paolo.fht.tools.FHTDifferenceType;
+import com.paolo.fht.tools.FHTFileType;
 
 public class FHTNodeImpl
 	implements FHTNode {
@@ -12,6 +13,7 @@ public class FHTNodeImpl
     protected final FHTNodeInfo info;
     protected final FHTNode parent;
     protected List<FHTNode> children;
+    private FHTDifferenceType difference;
 
     protected FHTNodeImpl(FHTNodeInfo info) {
 	this(info, null);
@@ -39,7 +41,7 @@ public class FHTNodeImpl
     }
 
     @Override
-    public synchronized FHTType getType() {
+    public synchronized FHTFileType getFileType() {
 	return info.getType();
     }
 
@@ -58,6 +60,16 @@ public class FHTNodeImpl
 	synchronized (children) {
 	    children.add(child);
 	}
+    }
+
+    @Override
+    public synchronized FHTDifferenceType getDifferenceType() {
+	return difference;
+    }
+
+    @Override
+    public synchronized void setDifferenceType(FHTDifferenceType difference) {
+	this.difference = difference;
     }
 
     @Override

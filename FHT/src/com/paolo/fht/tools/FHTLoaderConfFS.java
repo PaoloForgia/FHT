@@ -30,7 +30,7 @@ public class FHTLoaderConfFS
     }
 
     private FHTNodeInfo getRootInfo() {
-	return new FHTNodeInfo(file.getName(), "", file.length(), FHTType.folder);
+	return new FHTNodeInfo(file.getName(), "", file.length(), FHTFileType.folder);
     }
 
     @Override
