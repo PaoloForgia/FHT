@@ -96,4 +96,11 @@ public class FHTNodeImpl
 	    return false;
 	return true;
     }
+
+    @Override
+    public boolean hasChildren() {
+	synchronized (children) {
+	    return children.size() > 0;
+	}
+    }
 }

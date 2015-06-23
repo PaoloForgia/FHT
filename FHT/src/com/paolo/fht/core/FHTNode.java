@@ -21,6 +21,8 @@ public interface FHTNode {
 
     void addChild(FHTNode child);
 
+    boolean hasChildren();
+
     FHTDifferenceType getDifferenceType();
 
     void setDifferenceType(FHTDifferenceType difference);

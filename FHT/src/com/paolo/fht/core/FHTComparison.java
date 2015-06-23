@@ -12,72 +12,66 @@ public final class FHTComparison {
     }
 
     private void compareNodes(FHTNode h1, FHTNode h2) {
-	FHTDifferenceType difference = h1.equals(h2) ? FHTDifferenceType.none : FHTDifferenceType.different;
+	FHTDifferenceType difference = h1.equals(h2) ? FHTDifferenceType.equals : FHTDifferenceType.different;
 	h1.setDifferenceType(difference);
 	h2.setDifferenceType(difference);
-	int i1 = 0;
-	int i2 = 0;
-	comparison: for (;;) {
-	    if (h1.getChildren().size() == 0 && h2.getChildren().size() == 0) {
-		break comparison;
-	    } else if (h1.getChildren().size() == 0 && h2.getChildren().size() != 0) {
-		setAllChildrenOrphan(h2);
-		break comparison;
-	    } else if (h1.getChildren().size() != 0 && h2.getChildren().size() == 0) {
-		setAllChildrenOrphan(h1);
-		break comparison;
-	    }
-	    FHTNode n1 = h1.getChildren().get(i1);
-	    FHTNode n2 = h2.getChildren().get(i2);
-	    if (n1.getPath().compareTo(n2.getPath()) == 0) {
-		compareNodes(n1, n2);
-	    } else if (n1.getPath().compareTo(n2.getPath()) < 0) {
-		i1 = searchForOrphan(h1, i1, n2.getPath()); // n1 before n2
+	if (h1.hasChildren() && h2.hasChildren()) {
+	    compareChildren(h1, h2);
+	} else if (h1.hasChildren() && !h2.hasChildren()) {
+	    setAllOrphan(h1);
+	} else if (!h1.hasChildren() && h2.hasChildren()) {
+	    setAllOrphan(h2);
+	}
+    }
+
+    private void compareChildren(FHTNode h1, FHTNode h2) {
+	int size1 = h1.getChildren().size();
+	int size2 = h2.getChildren().size();
+	analizeChildren: for (int i1 = 0, i2 = 0;; i1++, i2++) {
+	    if (i1 < size1 && i2 < size2) {
+		FHTNode n1 = h1.getChildren().get(i1);
+		FHTNode n2 = h2.getChildren().get(i2);
+		if (n1.getPath().compareTo(n2.getPath()) == 0) {
+		    compareNodes(n1, n2);
+		} else if (n1.getPath().compareTo(n2.getPath()) < 0) {
+		    for (; i1 < size1; i1++) {
+			FHTNode current = h1.getChildren().get(i1);
+			if (current.getPath().compareTo(n2.getPath()) < 0) {
+			    current.setDifferenceType(FHTDifferenceType.orphan);
+			} else {
+			    break;
+			}
+		    }
+		} else {
+		    for (; i2 < size2; i2++) {
+			FHTNode current = h2.getChildren().get(i2);
+			if (n1.getPath().compareTo(current.getPath()) > 0) {
+			    current.setDifferenceType(FHTDifferenceType.orphan);
+			} else {
+			    break;
+			}
+		    }
+		}
+	    } else if (i1 < size1 && i2 == size2) {
+		for (; i1 < size1; i1++) {
+		    setAllOrphan(h1.getChildren().get(i1));
+		}
+		break analizeChildren;
+	    } else if (i1 == size1 && i2 < size2) {
+		for (; i2 < size2; i2++) {
+		    setAllOrphan(h2.getChildren().get(i2));
+		}
+		break analizeChildren;
 	    } else {
-		i2 = searchForOrphan(h2, i2, n1.getPath()); // n2 before n1
-	    }
-	    i1++;
-	    i2++;
-	    if (i1 != h1.getChildren().size() && i2 != h2.getChildren().size()) {
-		continue comparison;
-	    } else if (i1 == h1.getChildren().size() && i2 == h2.getChildren().size()) {
-		break;
-	    } else if (i1 == h1.getChildren().size() && i2 != h2.getChildren().size()) {
-		i2 = setRestOrphan(h2, i2);
-	    } else if (i1 != h1.getChildren().size() && i2 == h2.getChildren().size()) {
-		i1 = setRestOrphan(h1, i1);
+		break analizeChildren;
 	    }
 	}
     }
 
-    private void setAllChildrenOrphan(FHTNode node) {
+    private void setAllOrphan(FHTNode node) {
+	node.setDifferenceType(FHTDifferenceType.orphan);
 	for (FHTNode child : node.getChildren()) {
-	    child.setDifferenceType(FHTDifferenceType.orphan);
-	    if (child.getChildren().size() != 0)
-		setAllChildrenOrphan(child);
+	    setAllOrphan(child);
 	}
-    }
-
-    private int setRestOrphan(FHTNode h, int i) {
-	for (; i < h.getChildren().size(); i++) {
-	    FHTNode node = h.getChildren().get(i);
-	    node.setDifferenceType(FHTDifferenceType.orphan);
-	    if (node.getChildren().size() != 0)
-		setAllChildrenOrphan(node);
-	}
-	return i;
-    }
-
-    private int searchForOrphan(FHTNode h, int i, String path) {
-	for (; i < h.getChildren().size(); i++) {
-	    FHTNode current = h.getChildren().get(i);
-	    if (current.getPath().compareTo(path) == 0) {
-		i--;
-		break;
-	    } else {
-		current.setDifferenceType(FHTDifferenceType.orphan);
-	    }
-	}
-	return i;
     }
 }
