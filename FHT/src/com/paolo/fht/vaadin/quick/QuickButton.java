@@ -1,5 +1,6 @@
 package com.paolo.fht.vaadin.quick;
 
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Button;
 
 public class QuickButton
@@ -20,5 +21,10 @@ public class QuickButton
     public QuickButton(String text, ClickListener clickListener) {
 	this(text);
 	addClickListener(clickListener);
+    }
+
+    public QuickButton(String text, FontAwesome icon) {
+	this(text);
+	setIcon(icon);
     }
 }

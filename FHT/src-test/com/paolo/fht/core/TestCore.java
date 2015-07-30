@@ -12,9 +12,8 @@ public class TestCore {
 
     @Test
     public void testCompare() throws Exception {
-	FHTHierarchy h1;
-	h1 = new FHTHierarchy(new FHTLoaderConfFS("/Users/paoloforgia/Documents/Developer/Server/jboss-eap-6.3/"));
-	FHTHierarchy h2 = new FHTHierarchy(new FHTLoaderConfFS("/Users/paoloforgia/Documents/Developer/Server/jboss-eap-6.3/"));
+	FHTHierarchy h1 = new FHTHierarchy(new FHTLoaderConfFS("/Users/paoloforgia/Documents/Developer/Server/jboss-eap-6.3/"));
+	FHTHierarchy h2 = new FHTHierarchy(new FHTLoaderConfFS("/Users/paoloforgia/Documents/Developer/Server/jboss-eap-6.4/"));
 	h1.load();
 	h2.load();
 	// -------------------------------------------------------------

@@ -18,6 +18,20 @@
  *
  * @group util
  */
+ 
+.fht-browseNodesLayout {
+	overflow-y: scroll; 
+} 
+ 
+.fht-grayBorder {
+	border: 1px solid lightgray;
+}
+ 
+.fht-title {
+	font-weight: bold;
+	font-size: 25px;
+	text-align: center !important;
+} 
 
 @-webkit-keyframes valo-animate-in-fade {
 		0% {
