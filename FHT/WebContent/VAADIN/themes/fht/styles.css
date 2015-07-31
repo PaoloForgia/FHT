@@ -18,7 +18,15 @@
  *
  * @group util
  */
- 
+
+.fht-formLeft {
+	border-right: 1px solid lightgray;
+}
+
+.fht-formRight {
+	border-left: 1px solid lightgray;
+}
+
 .fht-buttonsPathBrowser {
 	overflow-x: auto;
 	overflow-y: hidden;

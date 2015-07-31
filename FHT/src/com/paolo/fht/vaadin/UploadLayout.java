@@ -5,6 +5,7 @@ import com.paolo.fht.vaadin.quick.QuickButton;
 import com.paolo.fht.vaadin.quick.QuickHorizontalLayout;
 import com.paolo.fht.vaadin.quick.QuickPopupWindow;
 import com.paolo.fht.vaadin.quick.QuickTextField;
+import com.vaadin.server.FontAwesome;
 import com.vaadin.ui.Alignment;
 import com.vaadin.ui.Button.ClickEvent;
 import com.vaadin.ui.Button.ClickListener;
@@ -21,7 +22,7 @@ class UploadLayout
     protected UploadLayout(String caption) {
 	super(false);
 	pathField = new QuickTextField(caption, "");
-	browseButton = new QuickButton("Browse");
+	browseButton = new QuickButton("Browse", FontAwesome.FOLDER_OPEN);
 	init();
     }
 
@@ -36,7 +37,7 @@ class UploadLayout
 
 	    @Override
 	    public void buttonClick(ClickEvent event) {
-		final NodeBrowser nodeBrowser = new NodeBrowser("Root browser", "Select root", BrowserFilter.folder_only_no_hidden);
+		final NodeBrowser nodeBrowser = new NodeBrowser("Root browser", "Select root", pathField.getValue(), BrowserFilter.folder_only_no_hidden);
 		QuickPopupWindow window = nodeBrowser.show();
 		window.addCloseListener(new CloseListener() {
 

@@ -36,13 +36,14 @@ public class NodeBrowser
 	all, folder_only, folder_only_no_hidden;
     }
 
-    public NodeBrowser(String windowCaption, String buttonCaption, BrowserFilter filter) {
+    public NodeBrowser(String windowCaption, String buttonCaption, String path, BrowserFilter filter) {
 	super();
 	this.windowCaption = windowCaption;
 	this.buttonCaption = buttonCaption;
 	nodeListnerLayout = new QuickVerticalLayout(false);
 	currentNodePathLayout = new QuickHorizontalLayout(false);
 	this.filter = filter;
+	this.currentPath = path.equals("") ? System.getProperty("os.name").toLowerCase().startsWith("mac") ? "/" : "C:/" : path;
 	init();
     }
 
@@ -57,7 +58,7 @@ public class NodeBrowser
 	nodeListnerLayout.setHeight("450");
 	nodeListnerLayout.setStyleName("fht-grayBorder");
 	addComponent(nodeListnerLayout);
-	QuickButton selectNodeButton = new QuickButton(buttonCaption);
+	QuickButton selectNodeButton = new QuickButton(buttonCaption, FontAwesome.CHECK);
 	addComponent(selectNodeButton);
 	setComponentAlignment(selectNodeButton, Alignment.MIDDLE_RIGHT);
 	selectNodeButton.addClickListener(new ClickListener() {
@@ -70,7 +71,7 @@ public class NodeBrowser
 	    }
 	});
 	try {
-	    showChildNodesAt(System.getProperty("os.name").toLowerCase().startsWith("mac") ? "/" : "C:/");
+	    showChildNodesAt(currentPath);
 	} catch (FileNotFoundException e) {
 	    QuickNotification.exception(e.getMessage());
 	    e.printStackTrace();
@@ -122,6 +123,7 @@ public class NodeBrowser
 	nodeTable.addContainerProperty("", Label.class, null);
 	nodeTable.addContainerProperty("Name", String.class, null);
 	nodeTable.setColumnExpandRatio("Name", 1);
+	nodeTable.addContainerProperty("Size", String.class, "--");
 	for (int i = 0; i < node.listFiles().length; i++) {
 	    final File child = node.listFiles()[i];
 	    if (filter == BrowserFilter.folder_only_no_hidden && (child.isFile() || child.isHidden()))
@@ -129,7 +131,7 @@ public class NodeBrowser
 	    else if (filter == BrowserFilter.folder_only && child.isFile())
 		continue;
 	    Label iconLabel = new Label(getIcon(child).getHtml(), ContentMode.HTML);
-	    nodeTable.addItem(new Object[] { iconLabel, child.getName() }, child.getAbsolutePath());
+	    nodeTable.addItem(new Object[] { iconLabel, child.getName(), child.isFile() ? child.length() + " bytes" : "--" }, child.getAbsolutePath());
 	}
 	nodeTable.addListener(new ItemClickListener() {
 
