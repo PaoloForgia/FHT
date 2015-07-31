@@ -49,6 +49,7 @@ public class NodeBrowser
     private void init() {
 	removeAllComponents();
 	setSizeUndefined();
+	currentNodePathLayout.setStyleName("fht-buttonsPathBrowser");
 	currentNodePathLayout.setWidth("700");
 	currentNodePathLayout.setHeight("37");
 	addComponent(currentNodePathLayout);

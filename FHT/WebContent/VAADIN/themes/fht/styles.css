@@ -18,6 +18,11 @@
  *
  * @group util
  */
+ 
+.fht-buttonsPathBrowser {
+	overflow-x: auto;
+	overflow-y: hidden;
+}
 
 .fht-grayBorder {
 	border: 1px solid lightgray;
