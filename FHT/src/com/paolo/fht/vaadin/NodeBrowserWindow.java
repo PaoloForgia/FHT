@@ -43,7 +43,7 @@ public class NodeBrowserWindow
 	nodeListnerLayout = new QuickVerticalLayout(false);
 	currentNodePathLayout = new QuickHorizontalLayout(false);
 	this.filter = filter;
-	this.currentPath = path.equals("") ? System.getProperty("os.name").toLowerCase().startsWith("mac") ? "/" : "C:/" : path;
+	this.currentPath = path.equals("") ? System.getProperty("os.name").toLowerCase().startsWith("mac") ? "/" : "C:\\" : path;
 	init();
     }
 
@@ -85,7 +85,12 @@ public class NodeBrowserWindow
 	buttons.setWidth("-1");
 	currentNodePathLayout.removeAllComponents();
 	currentNodePathLayout.addComponent(buttons);
-	String[] folders = path.equals("/") ? new String[] { "" } : path.split("/");
+	String[] folders;
+	if (path.contains("/")) {
+	    folders = path.equals("/") ? new String[] { "" } : path.split("/");
+	} else {
+	    folders = path.equals("\\") ? new String[] { "" } : path.split("\\");
+	}
 	String currentPath = "";
 	for (String folder : folders) {
 	    currentPath += folder + "/";
