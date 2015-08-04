@@ -1,6 +1,6 @@
 package com.paolo.fht.vaadin;
 
-import com.paolo.fht.vaadin.NodeBrowser.BrowserFilter;
+import com.paolo.fht.vaadin.NodeBrowserWindow.BrowserFilter;
 import com.paolo.fht.vaadin.quick.QuickButton;
 import com.paolo.fht.vaadin.quick.QuickHorizontalLayout;
 import com.paolo.fht.vaadin.quick.QuickPopupWindow;
@@ -12,14 +12,14 @@ import com.vaadin.ui.Button.ClickListener;
 import com.vaadin.ui.Window.CloseEvent;
 import com.vaadin.ui.Window.CloseListener;
 
-class UploadLayout
+public class NodeBrowserLayout
 	extends QuickHorizontalLayout {
 
     private static final long serialVersionUID = 1L;
     private final QuickTextField pathField;
     private final QuickButton browseButton;
 
-    protected UploadLayout(String caption) {
+    public NodeBrowserLayout(String caption) {
 	super(false);
 	pathField = new QuickTextField(caption, "");
 	browseButton = new QuickButton("Browse", FontAwesome.FOLDER_OPEN);
@@ -37,7 +37,7 @@ class UploadLayout
 
 	    @Override
 	    public void buttonClick(ClickEvent event) {
-		final NodeBrowser nodeBrowser = new NodeBrowser("Root browser", "Select root", pathField.getValue(), BrowserFilter.folder_only_no_hidden);
+		final NodeBrowserWindow nodeBrowser = new NodeBrowserWindow("Root browser", "Select root", pathField.getValue(), BrowserFilter.folder_only_no_hidden);
 		QuickPopupWindow window = nodeBrowser.show();
 		window.addCloseListener(new CloseListener() {
 
@@ -51,5 +51,9 @@ class UploadLayout
 		nodeBrowser.getSelectedNode();
 	    }
 	});
+    }
+
+    public String getPath() {
+	return pathField.getValue();
     }
 }

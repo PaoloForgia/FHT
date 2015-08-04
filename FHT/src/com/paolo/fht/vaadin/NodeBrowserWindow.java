@@ -20,7 +20,7 @@ import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Table;
 
-public class NodeBrowser
+public class NodeBrowserWindow
 	extends QuickVerticalLayout {
 
     private static final long serialVersionUID = 1L;
@@ -36,7 +36,7 @@ public class NodeBrowser
 	all, folder_only, folder_only_no_hidden;
     }
 
-    public NodeBrowser(String windowCaption, String buttonCaption, String path, BrowserFilter filter) {
+    public NodeBrowserWindow(String windowCaption, String buttonCaption, String path, BrowserFilter filter) {
 	super();
 	this.windowCaption = windowCaption;
 	this.buttonCaption = buttonCaption;

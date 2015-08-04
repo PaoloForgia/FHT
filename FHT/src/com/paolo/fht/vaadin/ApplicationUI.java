@@ -1,7 +1,9 @@
 package com.paolo.fht.vaadin;
 
+import com.paolo.fht.core.FHTLoader;
 import com.paolo.fht.vaadin.quick.QuickHorizontalLayout;
 import com.paolo.fht.vaadin.quick.QuickLabel;
+import com.paolo.fht.vaadin.quick.QuickNotification;
 import com.vaadin.annotations.Theme;
 import com.vaadin.server.FontAwesome;
 import com.vaadin.server.VaadinRequest;
@@ -27,10 +29,10 @@ public class ApplicationUI
 	layout.addComponent(new QuickLabel("Files Hierarchy Tool", "fht-title"));
 	QuickHorizontalLayout formContent = new QuickHorizontalLayout(false);
 	layout.addComponent(formContent);
-	ConfigurationForm formLeft = new ConfigurationForm();
+	final ConfigurationContainer formLeft = new ConfigurationContainer();
 	formLeft.setStyleName("fht-formLeft");
 	formContent.addComponent(formLeft);
-	ConfigurationForm formRight = new ConfigurationForm();
+	final ConfigurationContainer formRight = new ConfigurationContainer();
 	formRight.setStyleName("fht-formRight");
 	formContent.addComponent(formRight);
 	Button compareButton = new Button("Compare", FontAwesome.ARROWS_H);
@@ -42,7 +44,14 @@ public class ApplicationUI
 
 	    @Override
 	    public void buttonClick(ClickEvent event) {
-		// TODO
+		try {
+		    FHTLoader loaderLeft = formLeft.getLoader();
+		    FHTLoader loaderRight = formRight.getLoader();
+		    QuickNotification.tray("Loaded");
+		} catch (Exception e) {
+		    QuickNotification.exception(e.getMessage());
+		    e.printStackTrace();
+		}
 	    }
 	});
     }
