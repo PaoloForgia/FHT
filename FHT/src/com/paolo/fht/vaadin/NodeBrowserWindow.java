@@ -31,9 +31,14 @@ public class NodeBrowserWindow
     private String currentPath;
     private QuickPopupWindow window;
     private final BrowserFilter filter;
+    private final OS os;
 
     public enum BrowserFilter {
 	all, folder_only, folder_only_no_hidden;
+    }
+
+    private enum OS {
+	windows, osx, linux;
     }
 
     public NodeBrowserWindow(String windowCaption, String buttonCaption, String path, BrowserFilter filter) {
@@ -43,8 +48,19 @@ public class NodeBrowserWindow
 	nodeListnerLayout = new QuickVerticalLayout(false);
 	currentNodePathLayout = new QuickHorizontalLayout(false);
 	this.filter = filter;
-	this.currentPath = path.equals("") ? System.getProperty("os.name").toLowerCase().startsWith("mac") ? "/" : "C:\\" : path;
+	this.os = getOS();
+	this.currentPath = path.equals("") ? os == OS.windows ? "C:\\" : "/" : path;
 	init();
+    }
+
+    private OS getOS() {
+	String system = System.getProperty("os.name").toLowerCase();
+	if (system.startsWith("mac"))
+	    return OS.osx;
+	else if (system.startsWith("win"))
+	    return OS.windows;
+	else
+	    return OS.linux;
     }
 
     private void init() {
@@ -86,14 +102,14 @@ public class NodeBrowserWindow
 	currentNodePathLayout.removeAllComponents();
 	currentNodePathLayout.addComponent(buttons);
 	String[] folders;
-	if (path.contains("/")) {
-	    folders = path.equals("/") ? new String[] { "" } : path.split("/");
+	if (os == OS.windows) {
+	    folders = path.split("\\\\");
 	} else {
-	    folders = path.equals("\\") ? new String[] { "" } : path.split("\\");
+	    folders = path.equals("/") ? new String[] { "" } : path.split("/");
 	}
 	String currentPath = "";
 	for (String folder : folders) {
-	    currentPath += folder + "/";
+	    currentPath += folder + (os == OS.windows ? "\\" : "/");
 	    final String pathForButton = currentPath;
 	    Button folderButton = new Button(folder);
 	    buttons.addComponent(folderButton);
