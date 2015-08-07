@@ -26,7 +26,7 @@ public final class FHTHierarchy
 	this(conf.getLoader());
     }
 
-    private FHTHierarchy(FHTLoader loader) throws Exception {
+    public FHTHierarchy(FHTLoader loader) throws Exception {
 	super(loader.getRootInfo());
 	this.loader = loader;
 	this.rootPath = loader.getLoaderConf().getAbsolutePath();
@@ -93,6 +93,10 @@ public final class FHTHierarchy
 
     public synchronized String getAbsoluteRootPath() {
 	return rootPath;
+    }
+
+    public synchronized FHTLoader getLoader() {
+	return loader;
     }
 
     /**

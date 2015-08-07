@@ -17,13 +17,36 @@
  * @param {bool} $important (false) - should the property value be declared with !important
  *
  * @group util
- */
+ */ 
+
+.fht-treeLayout {
+	overflow: scroll;
+}
+ 
+.v-tree-node-caption-fht-tree-different {
+	color: blue;
+}
+
+.v-tree-node-caption-fht-tree-orphan {
+	color: red;
+}
+
+.fht-comparator-title {
+	font-weight: bold;
+}
 
 .fht-formLeft {
 	border-right: 1px solid lightgray;
 }
 
-.fht-formRight {
+.fht-borderContainer {
+	border: 1px solid lightgray;
+}
+.fht-rightBorderContainer {
+	border-right: 1px solid lightgray;
+}
+
+.fht-leftBorderContainer {
 	border-left: 1px solid lightgray;
 }
 

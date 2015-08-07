@@ -5,6 +5,7 @@ import com.paolo.fht.tools.FHTDifferenceType;
 public final class FHTComparison {
 
     public FHTComparison() {
+	super();
     }
 
     public void compare(FHTHierarchy h1, FHTHierarchy h2) {
